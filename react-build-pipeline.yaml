@@ -1,0 +1,26 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  appName: 'testreactcicd'  # Remove the leading slash  
+
+steps:
+- script: echo 'Starting React build --> $(System.DefaultWorkingDirectory) --> $(Build.ArtifactStagingDirectory)'
+  displayName: '0. Building process'
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: '1. Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: '2. Npm Install, Build'
+
+- upload: $(System.DefaultWorkingDirectory)/build/
+  artifact: drop
+  displayName: '3. Upload files to Artifact'
