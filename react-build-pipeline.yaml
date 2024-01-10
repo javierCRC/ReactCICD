@@ -1,26 +1,50 @@
+# Trigger: The trigger section specifies when the pipeline should be triggered. In this case, it is set to trigger on changes to the "main" branch of the repository.
+
 trigger:
 - main
+
+# Pool: The pool section defines the agent pool and the virtual machine image to be used for running the pipeline. It specifies that the pipeline should use the "ubuntu-latest" virtual machine image.
 
 pool:
   vmImage: ubuntu-latest
 
+# Variables: The variables section allows you to define environment-specific variables that can be used in the pipeline. In this code, it defines a variable called appName with the value "REACTAPPNAME."
 variables:
-  appName: 'testreactcicd'  # Remove the leading slash  
+  appName: 'REACTAPPNAME'  # Remove the leading slash  
 
+# Steps: The steps section outlines the series of tasks that the pipeline should execute. Each step is executed sequentially.
 steps:
 - script: echo 'Starting React build --> $(System.DefaultWorkingDirectory) --> $(Build.ArtifactStagingDirectory)'
   displayName: '0. Building process'
+  # -> This step is a simple script that echoes some information.
+  # -> It displays the current working directory and the directory where artifacts will be staged.
+  # ->This is primarily for logging and debugging purposes.
 
 - task: NodeTool@0
   inputs:
     versionSpec: '18.x'
   displayName: '1. Install Node.js'
 
+  # -> This step uses the NodeTool task to install Node.js.
+  # -> It specifies that it should install version 18.x of Node.js.
+  # -> The task is responsible for setting up the required Node.js environment.
+  
 - script: |
     npm install
     npm run build
   displayName: '2. Npm Install, Build'
 
+ # -> This step is a script that runs several npm (Node Package Manager) commands.
+ # ->This step is responsible for preparing the React application for deployment.
+  
 - upload: $(System.DefaultWorkingDirectory)/build/
   artifact: drop
   displayName: '3. Upload files to Artifact'
+
+   # -> This step uploads the built application files to the artifact staging directory.
+   # -> It specifies the source directory as $(System.DefaultWorkingDirectory)/dist/$(appName) and assigns the uploaded files to the "drop" artifact.
+   # -> This is typically done to prepare the application files for deployment or further distribution.
+
+# In summary: this YAML configuration sets up a pipeline that triggers on changes to the "main" branch, prepares a Node.js environment, installs project dependencies, builds the React application, and uploads the application files to an artifact for further use or deployment. 
+
+# It's a basic example for CI/CD pipeline for an React project.
