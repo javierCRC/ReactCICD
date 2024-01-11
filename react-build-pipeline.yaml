@@ -45,7 +45,7 @@ steps:
   displayName: '4. Upload files to Artifact'
 
    # -> This step uploads the built application files to the artifact staging directory.
-   # -> It specifies the source directory as $(System.DefaultWorkingDirectory)/dist/$(appName) and assigns the uploaded files to the "drop" artifact.
+   # -> It specifies the source directory as $(System.DefaultWorkingDirectory)/build/ and assigns the uploaded files to the "drop" artifact.
    # -> This is typically done to prepare the application files for deployment or further distribution.
 
 - script: rm -rf ./path/to/unused/files
