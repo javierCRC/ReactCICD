@@ -28,23 +28,31 @@ steps:
   # -> This step uses the NodeTool task to install Node.js.
   # -> It specifies that it should install version 18.x of Node.js.
   # -> The task is responsible for setting up the required Node.js environment.
+
+- script: npm ci
+  displayName: '2. Npm Install CI'
+  
+  # For installing dependencies in a CI environment, it's a good practice to use npm ci instead of npm install for faster and more reliable installs.
   
 - script: |
-    npm install
     npm run build
-  displayName: '2. Npm Install, Build'
-
- # -> This step is a script that runs several npm (Node Package Manager) commands.
+  displayName: '3. Npm Build'
+  
  # ->This step is responsible for preparing the React application for deployment.
   
 - upload: $(System.DefaultWorkingDirectory)/build/
   artifact: drop
-  displayName: '3. Upload files to Artifact'
+  displayName: '4. Upload files to Artifact'
 
    # -> This step uploads the built application files to the artifact staging directory.
    # -> It specifies the source directory as $(System.DefaultWorkingDirectory)/dist/$(appName) and assigns the uploaded files to the "drop" artifact.
    # -> This is typically done to prepare the application files for deployment or further distribution.
 
+- script: rm -rf ./path/to/unused/files
+  displayName: '5. Cleanup Unused Files'
+
+  # is a script that uses rm to remove unused files. The displayName provides a name for this cleanup step in the build logs.
+  
 # In summary: this YAML configuration sets up a pipeline that triggers on changes to the "main" branch, prepares a Node.js environment, installs project dependencies, builds the React application, and uploads the application files to an artifact for further use or deployment. 
 
 # It's a basic example for CI/CD pipeline for an React project.
